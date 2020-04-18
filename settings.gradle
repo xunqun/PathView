@@ -1,4 +1,3 @@
 rootProject.name='PathViewSample'
 include ':app'
-include ':app:pathview'
 include ':pathview'

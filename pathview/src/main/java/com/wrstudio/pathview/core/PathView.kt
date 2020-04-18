@@ -5,7 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import com.wrstudio.pathview.R
+import com.wrstudio.pathview.core.R
 import com.wrstudio.pathview.util.UiUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
