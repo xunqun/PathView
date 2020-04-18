@@ -2,6 +2,6 @@
 
 # Download
 
-gradle
+Download via Gradle
 
-    implementation 'com.whilerain.pathview:core:0.0.1'
+    implementation 'com.whilerain.pathview:core:x.y.z'
