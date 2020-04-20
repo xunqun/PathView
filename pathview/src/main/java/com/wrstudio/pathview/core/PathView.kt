@@ -100,13 +100,14 @@ class PathView @JvmOverloads constructor(
             if (maxX > minX && maxY > minY) {
                 val scale: Double = if (maxX - minX > maxY - minY) {
                     (canvasWidth.toDouble() / (maxX - minX))
-                } else
+                } else {
                     (canvasHeight.toDouble() / (maxY - minY))
+                }
                 path = Path()
 
                 for (i in rawData.indices) {
                     val x = ((rawData[i].first - minX) * scale + canvasLeft).toFloat()
-                    val y = ((rawData[i].second - minY) * scale + canvasTop).toFloat()
+                    val y = ((canvasHeight - (rawData[i].second - minY) * scale) + canvasTop).toFloat()
                     if (i == 0) {
                         path!!.moveTo(x, y)
                     } else {
