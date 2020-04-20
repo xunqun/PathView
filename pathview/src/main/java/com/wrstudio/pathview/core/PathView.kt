@@ -5,6 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.view.ViewDebug
 import com.wrstudio.pathview.core.R
 import com.wrstudio.pathview.util.UiUtil
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +36,10 @@ class PathView @JvmOverloads constructor(
      * The styleable attributes, color of the path
      */
     private var pathColor: Int = Color.BLACK
-
+    /**
+     * The styleable attributes, stroke width
+     */
+    private var strokeWidth: Float = UiUtil.dpToPx(5).toFloat()
     /**
      * The path to draw
      */
@@ -46,6 +50,7 @@ class PathView @JvmOverloads constructor(
             color = pathColor
             strokeWidth = UiUtil.dpToPx(3).toFloat()
             style = Paint.Style.STROKE
+            this.strokeCap = Paint.Cap.ROUND
         }
 
     init {
@@ -58,6 +63,8 @@ class PathView @JvmOverloads constructor(
             try {
                 pathColor = getColor(R.styleable.PathView_pathColor, Color.BLACK)
                 pathPaint.color = pathColor
+                strokeWidth = getDimension(R.styleable.PathView_strokSize, UiUtil.dpToPx(5).toFloat())
+                pathPaint.strokeWidth = strokeWidth
             } finally {
                 recycle()
             }
