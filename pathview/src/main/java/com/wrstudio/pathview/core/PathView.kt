@@ -72,6 +72,7 @@ class PathView @JvmOverloads constructor(
     }
 
     fun update(pairs: List<Pair<Double, Double>>) {
+        path = Path()
         rawData = pairs
         if(canvasWidth != 0 && canvasHeight != 0) {
             GlobalScope.launch {
