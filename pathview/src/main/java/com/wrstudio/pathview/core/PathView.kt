@@ -36,10 +36,12 @@ class PathView @JvmOverloads constructor(
      * The styleable attributes, color of the path
      */
     private var pathColor: Int = Color.BLACK
+
     /**
      * The styleable attributes, stroke width
      */
     private var strokeWidth: Float = UiUtil.dpToPx(5).toFloat()
+
     /**
      * The path to draw
      */
@@ -50,7 +52,8 @@ class PathView @JvmOverloads constructor(
             color = pathColor
             strokeWidth = UiUtil.dpToPx(3).toFloat()
             style = Paint.Style.STROKE
-            this.strokeCap = Paint.Cap.ROUND
+            strokeCap = Paint.Cap.ROUND
+            strokeJoin = Paint.Join.ROUND
         }
 
     init {
@@ -63,7 +66,8 @@ class PathView @JvmOverloads constructor(
             try {
                 pathColor = getColor(R.styleable.PathView_pathColor, Color.BLACK)
                 pathPaint.color = pathColor
-                strokeWidth = getDimension(R.styleable.PathView_strokSize, UiUtil.dpToPx(5).toFloat())
+                strokeWidth =
+                    getDimension(R.styleable.PathView_strokSize, UiUtil.dpToPx(5).toFloat())
                 pathPaint.strokeWidth = strokeWidth
             } finally {
                 recycle()
@@ -74,7 +78,7 @@ class PathView @JvmOverloads constructor(
     fun update(pairs: List<Pair<Double, Double>>) {
         path = Path()
         rawData = pairs
-        if(canvasWidth != 0 && canvasHeight != 0) {
+        if (canvasWidth != 0 && canvasHeight != 0) {
             GlobalScope.launch {
                 handleData()
                 invalidate()
@@ -85,17 +89,27 @@ class PathView @JvmOverloads constructor(
     private suspend fun handleData() {
         if (rawData.isEmpty()) return
 
-        withContext(Dispatchers.Main) {
+        withContext(Dispatchers.IO) {
             var maxX = rawData[0].first
             var minX = rawData[0].first
             var maxY = rawData[0].second
             var minY = rawData[0].second
+            var biasX = 0
+            var biasY = 0
 
             for (pair in rawData) {
                 if (pair.first > maxX) maxX = pair.first
                 if (pair.first < minX) minX = pair.first
                 if (pair.second > maxY) maxY = pair.second
                 if (pair.second < minY) minY = pair.second
+            }
+
+            if (maxX - minX > maxY - minY) {
+                biasX = 0
+                biasY = (((minX - minX) - (maxY - minY)) / 2f).toInt()
+            } else {
+                biasY = 0
+                biasX = (((minY - minY) - (maxX - minX)) / 2f).toInt()
             }
 
             if (maxX > minX && maxY > minY) {
@@ -107,8 +121,9 @@ class PathView @JvmOverloads constructor(
                 path = Path()
 
                 for (i in rawData.indices) {
-                    val x = ((rawData[i].first - minX) * scale + canvasLeft).toFloat()
-                    val y = ((canvasHeight - (rawData[i].second - minY) * scale) + canvasTop).toFloat()
+                    val x = ((rawData[i].first - minX) * scale + canvasLeft).toFloat() + biasX
+                    val y =
+                        ((canvasHeight - (rawData[i].second - minY) * scale) + canvasTop).toFloat() +  biasY
                     if (i == 0) {
                         path!!.moveTo(x, y)
                     } else {
