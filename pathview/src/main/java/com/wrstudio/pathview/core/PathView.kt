@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.locks.ReentrantLock
 
 class PathView @JvmOverloads constructor(
     context: Context,
@@ -47,6 +48,8 @@ class PathView @JvmOverloads constructor(
      */
     private var path: Path? = null
 
+    private var lock = ReentrantLock()
+
     private val pathPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = pathColor
@@ -76,12 +79,14 @@ class PathView @JvmOverloads constructor(
     }
 
     fun update(pairs: List<Pair<Double, Double>>) {
-        path = Path()
-        rawData = pairs
-        if (canvasWidth != 0 && canvasHeight != 0) {
-            GlobalScope.launch {
-                handleData()
-                invalidate()
+        synchronized(lock){
+            path = Path()
+            rawData = pairs
+            if (canvasWidth != 0 && canvasHeight != 0) {
+                GlobalScope.launch {
+                    handleData()
+                    invalidate()
+                }
             }
         }
     }
@@ -106,10 +111,10 @@ class PathView @JvmOverloads constructor(
 
             if (maxX - minX > maxY - minY) {
                 biasX = 0
-                biasY = (((minX - minX) - (maxY - minY)) / 2f).toInt()
+                biasY = (((maxX - minX) - (maxY - minY)) / 2f).toInt()
             } else {
                 biasY = 0
-                biasX = (((minY - minY) - (maxX - minX)) / 2f).toInt()
+                biasX = (((maxY - minY) - (maxX - minX)) / 2f).toInt()
             }
 
             if (maxX > minX && maxY > minY) {
