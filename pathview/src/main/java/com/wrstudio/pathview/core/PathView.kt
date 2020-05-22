@@ -126,9 +126,9 @@ class PathView @JvmOverloads constructor(
                 path = Path()
 
                 for (i in rawData.indices) {
-                    val x = ((rawData[i].first - minX) * scale + canvasLeft).toFloat() + biasX
+                    val x = ((rawData[i].first - minX + biasX) * scale + canvasLeft).toFloat()
                     val y =
-                        ((canvasHeight - (rawData[i].second - minY) * scale) + canvasTop).toFloat() +  biasY
+                        ((canvasHeight - (rawData[i].second - minY +  biasY) * scale) + canvasTop).toFloat()
                     if (i == 0) {
                         path!!.moveTo(x, y)
                     } else {

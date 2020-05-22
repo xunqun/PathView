@@ -7,7 +7,7 @@ publish {
 
     def groupProjectID = 'com.whilerain.pathview'
     def artifactProjectID = 'core'
-    def publishVersionID = '0.0.5'
+    def publishVersionID = '0.0.7'
 
     userOrg = 'xunqun'
     repoName = 'pathview'
@@ -25,8 +25,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 5
-        versionName "0.0.5"
+        versionCode 7
+        versionName "0.0.7"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
