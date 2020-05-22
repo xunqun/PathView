@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        vPath.update(arrayListOf(Pair(20.toDouble(),3.toDouble()),
-            Pair(20.toDouble(),8.toDouble()),
-            Pair(21.toDouble(),100.toDouble())))
+        vPath.update(arrayListOf(Pair(10.toDouble(), 50.toDouble()),
+            Pair(20.toDouble(),50.toDouble()),
+            Pair(60.toDouble(),51.toDouble())))
     }
 }

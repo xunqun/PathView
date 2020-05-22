@@ -143,8 +143,19 @@ class PathView @JvmOverloads constructor(
         super.onSizeChanged(w, h, oldw, oldh)
         canvasLeft = paddingLeft
         canvasTop = paddingTop
-        canvasWidth = w - paddingLeft - paddingRight
-        canvasHeight = h - paddingTop - paddingBottom
+
+        if(w > h) {
+            canvasHeight = h - paddingTop - paddingBottom
+            canvasWidth = canvasHeight
+            canvasTop = paddingTop
+            canvasLeft = (paddingLeft + ((w - paddingStart - paddingEnd) - canvasWidth) / 2f).toInt()
+        }else{
+            canvasWidth = w - paddingStart - paddingEnd
+            canvasHeight = canvasWidth
+            canvasLeft = paddingLeft
+            canvasTop = (paddingTop + ((h - paddingTop - paddingBottom) - canvasHeight) / 2f).toInt()
+        }
+
         GlobalScope.launch {
             handleData()
             invalidate()
