@@ -85,7 +85,9 @@ class PathView @JvmOverloads constructor(
             if (canvasWidth != 0 && canvasHeight != 0) {
                 GlobalScope.launch {
                     handleData()
-                    invalidate()
+                    withContext(Dispatchers.Main){
+                        invalidate()
+                    }
                 }
             }
         }
