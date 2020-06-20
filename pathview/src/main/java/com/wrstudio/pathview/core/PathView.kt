@@ -158,9 +158,11 @@ class PathView @JvmOverloads constructor(
             canvasTop = (paddingTop + ((h - paddingTop - paddingBottom) - canvasHeight) / 2f).toInt()
         }
 
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.IO) {
             handleData()
-            invalidate()
+            withContext(Dispatchers.Main){
+                invalidate()
+            }
         }
     }
 
